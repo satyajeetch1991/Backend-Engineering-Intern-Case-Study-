@@ -2,23 +2,36 @@
 
 ## Overview
 
-This repository contains a complete implementation of a backend system for managing products, inventory, and warehouses using Node.js, Express.js, and MongoDB. The project addresses the requirements for the Bynry Backend Developer Intern role case study.
+This repository contains a complete backend implementation for managing products, inventory, and warehouses, built as part of the Bynry Backend Developer Intern role case study.  
+
+The project is implemented in **two parts**:
+1. **Part 1**: Fixed API endpoint from the PDF — provided in **two versions**:
+   - **Original stack fix**: Node.js + Express + MongoDB (`part1_fixed_code.js`)
+   - **Alternative stack fix**: Flask + SQLAlchemy + SQLite/PostgreSQL (`flask_part1_solution/`)
+2. **Part 2 & 3**: Database schema, ER diagram, and low-stock alert API using Node.js + MongoDB.
+
+## Project Structure
+
 
 ## Project Structure
 
 ```
 bynry-backend-case-study/
-├── README.md                     # This file
-├── part1_code_review.md          # Code review analysis and fixes
-├── part1_fixed_code.js           # Corrected Express/MongoDB API code
-├── part2_db_schema.js            # Mongoose schema definitions
-├── part2_erd.dbdiagram           # ER diagram in dbdiagram.io format
-├── part2_erd.png                 # Exported ER diagram image
-├── part3_api.js                  # Low-stock alerts API implementation
-├── part3_sample_response.json    # Example API output
-├── package.json                  # Node.js dependencies
-└── server.js                     # Main server file
-```
+├── README.md # This file
+├── part1_code_review.md # Code review analysis and fixes
+├── part1_fixed_code.js # Corrected Express/MongoDB API code (Part 1 - Node.js)
+├── flask_part1_solution/ # Corrected Flask/SQLAlchemy API code (Part 1 - Flask)
+│ ├── app.py
+│ ├── models.py
+│ ├── requirements.txt
+│ └── .env.example
+├── part2_db_schema.js # Mongoose schema definitions (Part 2)
+├── part2_erd.dbdiagram # ER diagram source
+├── part2_erd.png # Exported ER diagram
+├── part3_api.js # Low-stock alerts API implementation (Part 3)
+├── part3_sample_response.json # Example API output
+├── package.json # Node.js dependencies
+└── server.js # Main Node.js server
 
 ## Technology Stack
 
@@ -48,6 +61,12 @@ bynry-backend-case-study/
 2. **Pagination**: Default limit of 100 alerts per request
 3. **Error Handling**: Standard HTTP status codes with descriptive messages
 4. **Logging**: Console logging for development (production would use proper logging service)
+
+### Flask Implementation (Part 1 alternative)
+- **Backend**: Flask (Python)
+- **Database**: SQLAlchemy ORM
+- **Supported DBs**: SQLite (default) or PostgreSQL
+- **Environment**: python-dotenv
 
 ## Prerequisites
 
