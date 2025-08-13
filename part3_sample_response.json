@@ -1,0 +1,132 @@
+{
+  "alerts": [
+    {
+      "product_id": "507f1f77bcf86cd799439011",
+      "product_name": "iPhone 15 Pro Max",
+      "sku": "IPH-15-PRO-MAX-256",
+      "warehouse_id": "507f1f77bcf86cd799439012",
+      "warehouse_name": "Main Distribution Center",
+      "current_stock": 3,
+      "threshold": 10,
+      "days_until_stockout": 2,
+      "supplier": {
+        "id": "507f1f77bcf86cd799439013",
+        "name": "Apple Inc.",
+        "contact_email": "procurement@apple.com",
+        "contact_phone": "+1-800-275-2273"
+      },
+      "category": "Electronics",
+      "reserved_quantity": 1,
+      "total_quantity": 4,
+      "last_updated": "2024-01-15T10:30:00.000Z",
+      "warehouse_location": "San Francisco, CA",
+      "warehouse_code": "SFO-DC-01"
+    },
+    {
+      "product_id": "507f1f77bcf86cd799439014",
+      "product_name": "Nike Air Max 270",
+      "sku": "NIKE-AM-270-BLK-42",
+      "warehouse_id": "507f1f77bcf86cd799439015",
+      "warehouse_name": "East Coast Warehouse",
+      "current_stock": 8,
+      "threshold": 25,
+      "days_until_stockout": 5,
+      "supplier": {
+        "id": "507f1f77bcf86cd799439016",
+        "name": "Nike Inc.",
+        "contact_email": "wholesale@nike.com",
+        "contact_phone": "+1-800-344-6453"
+      },
+      "category": "Clothing",
+      "reserved_quantity": 2,
+      "total_quantity": 10,
+      "last_updated": "2024-01-15T09:15:00.000Z",
+      "warehouse_location": "New York, NY",
+      "warehouse_code": "NYC-EC-01"
+    },
+    {
+      "product_id": "507f1f77bcf86cd799439017",
+      "product_name": "Organic Bananas",
+      "sku": "PROD-BAN-ORG-1KG",
+      "warehouse_id": "507f1f77bcf86cd799439018",
+      "warehouse_name": "Fresh Food Distribution",
+      "current_stock": 15,
+      "threshold": 50,
+      "days_until_stockout": 3,
+      "supplier": {
+        "id": "507f1f77bcf86cd799439019",
+        "name": "Fresh Harvest Co.",
+        "contact_email": "orders@freshharvest.com",
+        "contact_phone": "+1-555-0123"
+      },
+      "category": "Food",
+      "reserved_quantity": 0,
+      "total_quantity": 15,
+      "last_updated": "2024-01-15T08:45:00.000Z",
+      "warehouse_location": "Los Angeles, CA",
+      "warehouse_code": "LAX-FF-01"
+    },
+    {
+      "product_id": "507f1f77bcf86cd799439020",
+      "product_name": "Samsung 65\" 4K Smart TV",
+      "sku": "SAMS-65-4K-SMART",
+      "warehouse_id": "507f1f77bcf86cd799439012",
+      "warehouse_name": "Main Distribution Center",
+      "current_stock": 0,
+      "threshold": 10,
+      "days_until_stockout": null,
+      "supplier": {
+        "id": "507f1f77bcf86cd799439021",
+        "name": "Samsung Electronics",
+        "contact_email": "b2b@samsung.com",
+        "contact_phone": "+1-800-726-7864"
+      },
+      "category": "Electronics",
+      "reserved_quantity": 0,
+      "total_quantity": 0,
+      "last_updated": "2024-01-15T11:00:00.000Z",
+      "warehouse_location": "San Francisco, CA",
+      "warehouse_code": "SFO-DC-01"
+    },
+    {
+      "product_id": "507f1f77bcf86cd799439022",
+      "product_name": "Levi's 501 Jeans",
+      "sku": "LEVI-501-BLU-32",
+      "warehouse_id": "507f1f77bcf86cd799439015",
+      "warehouse_name": "East Coast Warehouse",
+      "current_stock": 12,
+      "threshold": 25,
+      "days_until_stockout": 8,
+      "supplier": {
+        "id": "507f1f77bcf86cd799439023",
+        "name": "Levi Strauss & Co.",
+        "contact_email": "wholesale@levi.com",
+        "contact_phone": "+1-800-872-5384"
+      },
+      "category": "Clothing",
+      "reserved_quantity": 3,
+      "total_quantity": 15,
+      "last_updated": "2024-01-15T07:30:00.000Z",
+      "warehouse_location": "New York, NY",
+      "warehouse_code": "NYC-EC-01"
+    }
+  ],
+  "total_alerts": 5,
+  "limited_alerts": 5,
+  "company_name": "TechFashion Retail Corp",
+  "thresholds_used": {
+    "electronics": 10,
+    "clothing": 25,
+    "food": 50,
+    "default": 20
+  },
+  "filters_applied": {
+    "company_id": "507f1f77bcf86cd799439010",
+    "limit": 100,
+    "include_inactive": false,
+    "threshold_override": "none"
+  },
+  "generated_at": "2024-01-15T12:00:00.000Z"
+}
+
+

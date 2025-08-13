@@ -1,0 +1,248 @@
+// Bynry Backend Case Study - Database Schema
+// Import this file into dbdiagram.io to view the ER diagram
+
+Table companies {
+  _id ObjectId [pk]
+  name varchar(255) [not null]
+  legal_name varchar(255)
+  tax_id varchar(50) [unique, note: 'Business tax identifier']
+  address_street varchar(255) [not null]
+  address_city varchar(100) [not null]
+  address_state varchar(100) [not null]
+  address_country varchar(100) [not null]
+  address_postal_code varchar(20) [not null]
+  contact_email varchar(255) [not null]
+  contact_phone varchar(20)
+  contact_website varchar(255)
+  status enum('active', 'inactive', 'suspended') [default: 'active']
+  settings_low_stock_thresholds_electronics int [default: 10]
+  settings_low_stock_thresholds_clothing int [default: 25]
+  settings_low_stock_thresholds_food int [default: 50]
+  settings_low_stock_thresholds_default int [default: 20]
+  settings_alert_frequency enum('daily', 'weekly', 'monthly') [default: 'daily']
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+  
+  indexes {
+    (tax_id)
+    (contact_email)
+    (status)
+  }
+}
+
+Table warehouses {
+  _id ObjectId [pk]
+  name varchar(255) [not null]
+  company_id ObjectId [ref: > companies._id, not null]
+  code varchar(20) [unique, not null, note: 'Warehouse identifier code']
+  type enum('primary', 'secondary', 'distribution', 'retail') [default: 'secondary']
+  address_street varchar(255) [not null]
+  address_city varchar(100) [not null]
+  address_state varchar(100) [not null]
+  address_country varchar(100) [not null]
+  address_postal_code varchar(20) [not null]
+  contact_manager varchar(100)
+  contact_email varchar(255)
+  contact_phone varchar(20)
+  capacity_total_space decimal [note: 'in cubic meters']
+  capacity_used_space decimal [default: 0]
+  capacity_total_pallets int
+  capacity_used_pallets int [default: 0]
+  status enum('active', 'inactive', 'maintenance') [default: 'active']
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+  
+  indexes {
+    (company_id)
+    (code)
+    (status)
+    (address_city, address_state)
+  }
+}
+
+Table products {
+  _id ObjectId [pk]
+  name varchar(255) [not null]
+  sku varchar(50) [unique, not null, note: 'Stock Keeping Unit - unique across platform']
+  description text
+  short_description varchar(500)
+  price decimal(10,2) [not null, note: 'Selling price with 2 decimal precision']
+  cost_price decimal(10,2) [note: 'Cost price for margin calculations']
+  category varchar(100) [not null]
+  subcategory varchar(100)
+  brand varchar(100)
+  weight decimal(8,2) [note: 'Product weight in kg']
+  dimensions_length decimal(8,2) [note: 'Length in cm']
+  dimensions_width decimal(8,2) [note: 'Width in cm']
+  dimensions_height decimal(8,2) [note: 'Height in cm']
+  dimensions_unit enum('cm', 'inch') [default: 'cm']
+  is_bundle boolean [default: false, note: 'Indicates if product is a bundle']
+  tags text [note: 'Array of product tags']
+  status enum('active', 'inactive', 'discontinued') [default: 'active']
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+  
+  indexes {
+    (sku)
+    (category)
+    (brand)
+    (status)
+    (tags)
+  }
+}
+
+Table inventory {
+  _id ObjectId [pk]
+  product_id ObjectId [ref: > products._id, not null]
+  warehouse_id ObjectId [ref: > warehouses._id, not null]
+  quantity int [not null, default: 0, note: 'Current available stock']
+  reserved_quantity int [default: 0, note: 'Quantity reserved for orders']
+  allocated_quantity int [default: 0, note: 'Quantity allocated to orders']
+  safety_stock int [default: 0, note: 'Minimum stock level before reorder']
+  reorder_point int [default: 0, note: 'Stock level that triggers reorder']
+  reorder_quantity int [default: 0, note: 'Quantity to reorder']
+  last_restocked timestamp
+  last_updated timestamp [default: `now()`]
+  expiry_date timestamp [note: 'Product expiration date if applicable']
+  batch_number varchar(100) [note: 'Manufacturing batch number']
+  location_aisle varchar(50) [note: 'Warehouse aisle location']
+  location_shelf varchar(50) [note: 'Warehouse shelf location']
+  location_bin varchar(50) [note: 'Warehouse bin location']
+  
+  indexes {
+    (product_id, warehouse_id) [unique, note: 'One inventory record per product per warehouse']
+    (warehouse_id)
+    (quantity)
+    (location_aisle, location_shelf)
+  }
+}
+
+Table inventory_logs {
+  _id ObjectId [pk]
+  product_id ObjectId [ref: > products._id, not null]
+  warehouse_id ObjectId [ref: > warehouses._id, not null]
+  operation enum('add', 'subtract', 'set', 'reserve', 'allocate', 'adjust') [not null]
+  quantity_change int [not null, note: 'Positive or negative quantity change']
+  previous_quantity int [not null, note: 'Stock level before change']
+  new_quantity int [not null, note: 'Stock level after change']
+  reason varchar(200) [note: 'Reason for inventory change']
+  reference_type enum('order', 'purchase', 'return', 'adjustment', 'transfer', 'system') [default: 'system']
+  reference_id varchar(100) [note: 'External reference ID']
+  user_id varchar(100) [note: 'User who made the change']
+  notes varchar(500) [note: 'Additional notes about the change']
+  timestamp timestamp [default: `now()`]
+  
+  indexes {
+    (product_id, timestamp) [note: 'For tracking product inventory history']
+    (warehouse_id, timestamp) [note: 'For tracking warehouse inventory history']
+    (operation, timestamp) [note: 'For analyzing inventory operations']
+    (reference_type, reference_id) [note: 'For linking to external systems']
+  }
+}
+
+Table suppliers {
+  _id ObjectId [pk]
+  name varchar(255) [not null]
+  code varchar(20) [unique, not null, note: 'Supplier identifier code']
+  company_name varchar(255) [not null]
+  tax_id varchar(50) [unique, sparse: true]
+  address_street varchar(255) [not null]
+  address_city varchar(100) [not null]
+  address_state varchar(100) [not null]
+  address_country varchar(100) [not null]
+  address_postal_code varchar(20) [not null]
+  contact_primary_name varchar(100) [not null]
+  contact_primary_email varchar(255) [not null]
+  contact_primary_phone varchar(20)
+  contact_primary_title varchar(100)
+  contact_billing_name varchar(100)
+  contact_billing_email varchar(255)
+  contact_billing_phone varchar(20)
+  payment_terms enum('net_30', 'net_60', 'net_90', 'immediate') [default: 'net_30']
+  credit_limit decimal(12,2) [note: 'Maximum credit allowed']
+  rating int [min: 1, max: 5, default: 3, note: 'Supplier performance rating']
+  status enum('active', 'inactive', 'suspended') [default: 'active']
+  categories text [note: 'Array of supplier categories']
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+  
+  indexes {
+    (code)
+    (tax_id)
+    (status)
+    (categories)
+  }
+}
+
+Table product_suppliers {
+  _id ObjectId [pk]
+  product_id ObjectId [ref: > products._id, not null]
+  supplier_id ObjectId [ref: > suppliers._id, not null]
+  supplier_sku varchar(100) [note: 'Supplier\'s SKU for this product']
+  is_primary boolean [default: false, note: 'Primary supplier for reordering']
+  lead_time_days int [default: 7, note: 'Days to receive order from supplier']
+  minimum_order_quantity int [default: 1, note: 'Minimum order quantity']
+  unit_cost decimal(10,2) [note: 'Cost per unit from this supplier']
+  status enum('active', 'inactive', 'discontinued') [default: 'active']
+  last_order_date timestamp
+  last_order_quantity int
+  notes varchar(500)
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+  
+  indexes {
+    (product_id, supplier_id) [unique, note: 'One relationship per product-supplier pair']
+    (supplier_id)
+    (is_primary)
+  }
+}
+
+Table bundle_items {
+  _id ObjectId [pk]
+  bundle_product_id ObjectId [ref: > products._id, not null, note: 'The bundle product']
+  component_product_id ObjectId [ref: > products._id, not null, note: 'Component product in bundle']
+  quantity int [not null, min: 1, default: 1, note: 'Quantity of component in bundle']
+  is_optional boolean [default: false, note: 'Whether component is optional']
+  can_substitute boolean [default: false, note: 'Whether component can be substituted']
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+  
+  indexes {
+    (bundle_product_id) [note: 'For finding all components of a bundle']
+    (component_product_id) [note: 'For finding all bundles containing a component']
+  }
+}
+
+Table sales_activity {
+  _id ObjectId [pk]
+  product_id ObjectId [ref: > products._id, not null]
+  warehouse_id ObjectId [ref: > warehouses._id, not null]
+  quantity_sold int [not null, min: 1, note: 'Quantity sold in this transaction']
+  sale_date timestamp [not null]
+  order_id varchar(100) [note: 'Reference to sales order']
+  customer_id varchar(100) [note: 'Reference to customer']
+  unit_price decimal(10,2) [note: 'Price per unit sold']
+  total_amount decimal(12,2) [note: 'Total amount for this sale']
+  created_at timestamp [default: `now()`]
+  
+  indexes {
+    (product_id, sale_date) [note: 'For tracking product sales over time']
+    (warehouse_id, sale_date) [note: 'For tracking warehouse sales over time']
+    (sale_date) [note: 'For analyzing sales trends']
+  }
+}
+
+// Relationships
+Ref: warehouses.company_id > companies._id
+Ref: inventory.product_id > products._id
+Ref: inventory.warehouse_id > warehouses._id
+Ref: inventory_logs.product_id > products._id
+Ref: inventory_logs.warehouse_id > warehouses._id
+Ref: product_suppliers.product_id > products._id
+Ref: product_suppliers.supplier_id > suppliers._id
+Ref: bundle_items.bundle_product_id > products._id
+Ref: bundle_items.component_product_id > products._id
+Ref: sales_activity.product_id > products._id
+Ref: sales_activity.warehouse_id > warehouses._id
+
+
